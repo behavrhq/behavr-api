@@ -1,0 +1,8 @@
+spring:
+  docker:
+    compose:
+      enabled: false
+
+behavr:
+  kafka:
+    ensure-topic: false

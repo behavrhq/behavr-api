@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: behavr-api
+  profiles:
+    active: local
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      fail-fast: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+behavr:
+  collector:
+    max-batch-size: 100
+    allowed-event-types:
+      - page_view
+      - search
+      - product_view
+      - product_click
+      - add_to_cart
+      - checkout_start
+      - purchase
+  kafka:
+    topic: behavr.events.raw
+    ensure-topic: true
+    topic-partitions: 1
+    topic-replication-factor: 1
+  sites:
+    site_123: test_secret_key
+
+---
+# Production: Kafka on Confluent Cloud (https://confluent.cloud).
+# Prefer a project-root `.env` file (see `.env.example`) or your platform secret store. Never commit secrets.
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  docker:
+    compose:
+      enabled: false
+
+  kafka:
+    bootstrap-servers: ${CONFLUENT_BOOTSTRAP_SERVERS}
+    admin:
+      fail-fast: false
+    producer:
+      client-id: behavr-collector
+      properties:
+        acks: all
+        spring.json.add.type.headers: false
+        # Fail HTTP before typical REST client read timeout if broker/metadata stalls
+        max.block.ms: 45000
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: PLAIN
+      # API key = username, API secret = password (Confluent Cloud → API keys)
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username='${CONFLUENT_API_KEY}' password='${CONFLUENT_API_SECRET}';
+
+behavr:
+  kafka:
+    topic-partitions: 3
+    topic-replication-factor: 3

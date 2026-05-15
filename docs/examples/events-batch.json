@@ -1,0 +1,28 @@
+{
+  "site_id": "site_123",
+  "sent_at": "2026-05-11T20:00:00Z",
+  "events": [
+    {
+      "event_id": "8f3dd1c7-0b7c-4baf-91a8-8f41d9d7d4c1",
+      "event_type": "search",
+      "site_id": "site_123",
+      "anonymous_id": "anon_123",
+      "session_id": "session_456",
+      "occurred_at": "2026-05-11T20:00:00Z",
+      "url": "https://shop.example.com/search?q=hoodie",
+      "path": "/search",
+      "title": "Search results",
+      "referrer": "https://google.com",
+      "user_agent": "Mozilla/5.0",
+      "browser_language": "en-US",
+      "device_type": "desktop",
+      "sdk_version": "1.0.0",
+      "utm": {},
+      "properties": {
+        "query": "hoodie",
+        "results_count": 12,
+        "source": "live_input"
+      }
+    }
+  ]
+}

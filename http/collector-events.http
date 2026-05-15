@@ -1,0 +1,132 @@
+### Behavr Collector — local defaults (no API key when profile is `local`)
+### With profile `prod`: every POST needs `X-Behavr-Site-Key` (see @siteKey). Topic `behavr.events.raw` is auto-created at startup if your Confluent API key allows it; otherwise create the topic in the Confluent UI.
+@baseUrl = http://localhost:8080
+@siteKey = test_secret_key
+
+### Health (optional sanity check)
+GET {{baseUrl}}/actuator/health
+Accept: application/json
+
+### Send batch — search (matches SDK / spec shape)
+POST {{baseUrl}}/v1/events
+Content-Type: application/json
+
+{
+  "site_id": "site_123",
+  "sent_at": "2026-05-15T12:00:00Z",
+  "events": [
+    {
+      "event_id": "8f3dd1c7-0b7c-4baf-91a8-8f41d9d7d4c1",
+      "event_type": "search",
+      "site_id": "site_123",
+      "anonymous_id": "anon_123",
+      "session_id": "session_456",
+      "occurred_at": "2026-05-15T12:00:00Z",
+      "url": "https://shop.example.com/search?q=hoodie",
+      "path": "/search",
+      "title": "Search results",
+      "referrer": "https://google.com",
+      "user_agent": "Mozilla/5.0",
+      "browser_language": "en-US",
+      "device_type": "desktop",
+      "sdk_version": "1.0.0",
+      "utm": {
+        "utm_source": "google",
+        "utm_medium": "cpc"
+      },
+      "properties": {
+        "query": "hoodie",
+        "results_count": 12,
+        "source": "live_input"
+      }
+    }
+  ]
+}
+
+### Send batch — page_view + product_view (two events)
+POST {{baseUrl}}/v1/events
+Content-Type: application/json
+
+{
+  "site_id": "site_123",
+  "sent_at": "2026-05-15T12:00:01Z",
+  "events": [
+    {
+      "event_id": "11111111-1111-4111-8111-111111111111",
+      "event_type": "page_view",
+      "site_id": "site_123",
+      "anonymous_id": "anon_abc",
+      "session_id": "sess_xyz",
+      "occurred_at": "2026-05-15T12:00:01Z",
+      "url": "https://shop.example.com/products",
+      "path": "/products",
+      "title": "Products",
+      "referrer": null,
+      "user_agent": "HTTP Client",
+      "browser_language": "en-US",
+      "device_type": "desktop",
+      "sdk_version": "1.0.0",
+      "utm": {},
+      "properties": {
+        "source": "http_file"
+      }
+    },
+    {
+      "event_id": "22222222-2222-4222-8222-222222222222",
+      "event_type": "product_view",
+      "site_id": "site_123",
+      "anonymous_id": "anon_abc",
+      "session_id": "sess_xyz",
+      "occurred_at": "2026-05-15T12:00:02Z",
+      "url": "https://shop.example.com/p/sku_123",
+      "path": "/p/sku_123",
+      "title": "Nike Hoodie",
+      "referrer": "https://shop.example.com/products",
+      "user_agent": "HTTP Client",
+      "browser_language": "en-US",
+      "device_type": "desktop",
+      "sdk_version": "1.0.0",
+      "utm": {},
+      "properties": {
+        "product_id": "sku_123",
+        "product_name": "Nike Hoodie",
+        "source": "http_file"
+      }
+    }
+  ]
+}
+
+### Same as first request but with site API key (use when not running `local` profile)
+POST {{baseUrl}}/v1/events
+Content-Type: application/json
+X-Behavr-Site-Key: {{siteKey}}
+
+{
+  "site_id": "site_123",
+  "sent_at": "2026-05-15T12:00:00Z",
+  "events": [
+    {
+      "event_id": "aaaaaaaa-bbbb-4ccc-dddd-eeeeeeeeeeee",
+      "event_type": "purchase",
+      "site_id": "site_123",
+      "anonymous_id": "anon_123",
+      "session_id": "session_456",
+      "occurred_at": "2026-05-15T12:00:00Z",
+      "url": "https://shop.example.com/thanks",
+      "path": "/thanks",
+      "title": "Thank you",
+      "referrer": "https://shop.example.com/checkout",
+      "user_agent": "Mozilla/5.0",
+      "browser_language": "en-US",
+      "device_type": "desktop",
+      "sdk_version": "1.0.0",
+      "utm": {},
+      "properties": {
+        "order_id": "order_1001",
+        "total": 159.98,
+        "currency": "USD",
+        "source": "http_file"
+      }
+    }
+  ]
+}
