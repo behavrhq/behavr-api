@@ -39,7 +39,7 @@ class KafkaEventPublisherTest {
 	}
 
 	@Test
-	void publishesWithSiteIdEventIdKey() throws Exception {
+	void publishesWithSiteIdEventIdKey() {
 		CollectedEvent event =
 				new CollectedEvent(
 						"e1",
