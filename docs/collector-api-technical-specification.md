@@ -1,8 +1,8 @@
 # Behavr Collector API
 
-## AI Agent Development Specification
+## Technical Development Specification
 
-This document is a development specification for an AI coding agent working inside an already generated Spring Boot project.
+This document is a technical development specification **Behavr Collector API**.
 
 The initial Spring Boot project has already been created via Spring Initializr.
 
@@ -684,7 +684,7 @@ Expected response:
 
 ---
 
-# 20. Implementation Notes for AI Agent
+# 20. Implementation Notes
 
 Follow these rules:
 

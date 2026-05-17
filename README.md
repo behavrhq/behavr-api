@@ -2,7 +2,7 @@
 
 Spring Boot **ingestion gateway** for the **Behavr** JavaScript SDK (`src/main/resources/behavr.js`): accepts batched browser events over HTTP, validates them, enriches them with server metadata, and publishes each event to **Apache Kafka**.
 
-Detailed behavior is specified in [`docs/collector-api-spec.md`](docs/collector-api-spec.md).
+Detailed behavior is specified in [`docs/collector-api-spec.md`](docs/collector-api-technical-specification.md).
 
 ```text
 receive → validate → enrich → publish to Kafka → HTTP 202 Accepted
@@ -363,7 +363,8 @@ net.behavr.api.ApiApplication
 
 ## Documentation
 
-- [Collector API specification](docs/collector-api-spec.md)
+- [Collector API specification](docs/collector-api-technical-specification.md)
+- [Downstream Kafka consumer guide](docs/downstream-kafka-consumer-guide.md) (Spring Boot services consuming `behavr.events.raw`)
 - [Example event batch](docs/examples/events-batch.json)
 
 ---
